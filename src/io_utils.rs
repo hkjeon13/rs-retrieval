@@ -11,7 +11,7 @@ pub struct Query {
     pub text: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 pub struct IndexingInput {
     pub group_id: String,
     pub user_id: String,
@@ -19,7 +19,7 @@ pub struct IndexingInput {
     pub documents:Vec<Document>
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct IndexingOutput {
     pub group_id: String,
     pub user_id: String,
@@ -27,7 +27,7 @@ pub struct IndexingOutput {
     pub save_path: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 pub struct SearchInput {
     pub group_id: String,
     pub user_id: String,
@@ -37,7 +37,7 @@ pub struct SearchInput {
 }
 
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct SearchOutput {
     pub group_id: String,
     pub user_id: String,
@@ -47,7 +47,7 @@ pub struct SearchOutput {
 
 
 
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 pub struct DeleteInput {
     pub group_id: String,
     pub user_id: String,
@@ -55,7 +55,7 @@ pub struct DeleteInput {
     pub document_id: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct DeleteOutput {
     pub group_id: String,
     pub user_id: String,
