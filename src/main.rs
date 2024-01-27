@@ -1,10 +1,11 @@
-mod io_utils;
 
 use axum::{
-    routing::{get, post},
+    routing::{post},
     http::StatusCode,
     Json, Router,
 };
+
+mod io_utils;
 use io_utils::{IndexingInput, SearchInput, DeleteInput, IndexingOutput, SearchOutput, DeleteOutput};
 
 #[tokio::main]
