@@ -1,7 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use serde_derive::{Serialize,Deserialize};
 use std::path::Path;
-use tqdm_rs;
 use counter::Counter;
 use rayon::prelude::*;
 use std;
@@ -12,8 +11,8 @@ fn _calculate(tf: f32, num_docs: f32, doc_len: usize, average_length: f32, k1: f
 
 
 #[derive(Serialize, Deserialize, Debug)]
-struct BM25 {
-    index_map: HashMap<String, HashMap<String, u32>>,
+pub struct BM25 {
+    pub index_map: HashMap<String, HashMap<String, u32>>,
     doc_len_map: HashMap<String, usize>,
     freeze_map: HashMap<String, HashMap<String, f32>>,
     k1: f32,
@@ -22,25 +21,24 @@ struct BM25 {
 }
 
 
+
 impl BM25 {
-    #[new]
-    fn new() -> Self {
+    pub fn new() -> Self {
         BM25 { index_map: HashMap::new(), doc_len_map: HashMap::new(), freeze_map: HashMap::new(), k1: 1.5, b: 0.75, average_length: 0.0}
     }
 
-    #[classmethod]
-    fn load(path:String) -> Self {
+    pub fn load(path:String) -> Self {
         let json_file = std::fs::read_to_string(path).expect("Unable to read file");
         serde_json::from_str(&json_file).unwrap()
     }
 
-    fn save(&self, path: String) {
+    pub fn save(&self, path: String) {
         let json_file = serde_json::to_string(&self).unwrap();
         std::fs::write(path, json_file).expect("Unable to write file");
     }
 
 
-    fn add_document(&mut self, id: String, document: Vec<String>) {
+    pub fn add_document(&mut self, id: String, document: Vec<String>) {
         for token in document.iter() {
             if !self.index_map.contains_key(token) {
                 self.index_map.insert(
@@ -58,7 +56,7 @@ impl BM25 {
         self.doc_len_map.insert(id.to_string(), document.len());
     }
 
-    fn freeze(&mut self) {
+    pub fn freeze(&mut self) {
         self.average_length = self.doc_len_map.values().sum::<usize>() as f32 / self.doc_len_map.len() as f32;
         self.freeze_map = self.index_map.iter()
             .map(|(k, doc_freq)| (k.to_string(), doc_freq.iter()
@@ -81,7 +79,7 @@ impl BM25 {
 
 
 
-    fn search(&self, query_tokens: Vec<String>, n: usize) -> Vec<(String, f32)> {
+    pub fn search(&self, query_tokens: Vec<String>, n: usize) -> Vec<(String, f32)> {
         if self.freeze_map.len() == 0 {
             panic!("Please freeze the index before searching!");
         }
@@ -104,13 +102,13 @@ impl BM25 {
     }
 
 
-    fn batch_search(&self, tokenized_queries: Vec<Vec<String>>, n: usize) -> Vec<Vec<(String, f32)>> {
+    pub fn batch_search(&self, tokenized_queries: Vec<Vec<String>>, n: usize) -> Vec<Vec<(String, f32)>> {
         tokenized_queries.par_iter().map(
-            |tokenized_query| self.search(tokenized_query.to_vec(), n).unwrap()
+            |tokenized_query| self.search(tokenized_query.to_vec(), n)
         ).collect()
     }
 
-    fn delete_document(&mut self, id: String) {
+    pub fn delete_document(&mut self, id: String) {
         let tokens_to_modify: Vec<String> = self.index_map.iter()
             .filter(|(_, target)| target.contains_key(&id))
             .map(|(token, _)| token.clone())
