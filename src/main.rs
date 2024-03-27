@@ -111,7 +111,8 @@ async fn indexing(
 
     fs::create_dir_all(save_dir.as_str()).unwrap();
     bm25.save(save_path.to_string());
-    //save chunked_documents
+    //save chunked_documents.
+    //is it necessary?
     let chunked_documents_path = format!("{}chunked_documents.json", save_dir);
     let json_file = serde_json::to_string(&id_to_doc).unwrap();
     std::fs::write(chunked_documents_path, json_file).expect("Unable to write file");
