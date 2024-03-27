@@ -5,6 +5,8 @@ use counter::Counter;
 use rayon::prelude::*;
 use std;
 
+//todo: add document containing 
+
 fn _calculate(tf: f32, num_docs: f32, doc_len: usize, average_length: f32, k1: f32, b: f32, df: f32) -> f32 {
     (tf * (k1 + 1.0)) / (tf + k1 * (1.0 - b + b * (doc_len as f32 / average_length))) * (((num_docs as f32 + 1.0) / (df + 1.0)).ln() + 1.0)
 }
